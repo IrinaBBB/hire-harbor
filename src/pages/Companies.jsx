@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { getCompanies } from '../services/apiCompanies.js'
+import { deleteCompany, getCompanies } from '../services/apiCompanies.js'
 import { Button, Modal, Table } from 'react-bootstrap'
 import { BsFillInfoCircleFill, BsFillPencilFill, BsFillTrash3Fill } from 'react-icons/bs'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Loading from '../components/Loading.jsx'
+import Spinner from 'react-bootstrap/Spinner'
 
 function Companies() {
 
@@ -21,6 +22,23 @@ function Companies() {
         setCompanyInfo(() => companies.find(company => company.company_id === id))
         setShow(true)
     }
+
+    const queryClient = useQueryClient()
+
+    const { isLoading: isDeleting, mutate } = useMutation({
+        mutationFn: deleteCompany,
+        onSuccess: () => {
+            alert('Company successfully deleted')
+            queryClient
+                .invalidateQueries({
+                    queryKey: ['Companies'],
+                })
+                .then()
+        },
+        onError: (error) => {
+            alert(error.message)
+        },
+    })
 
 
     if (isLoading) return <Loading />
@@ -46,7 +64,19 @@ function Companies() {
                         <td><Button variant='primary'
                                     onClick={() => handleShow(company.company_id)}><BsFillInfoCircleFill /></Button>{' '}
                             <Button variant='warning'><BsFillPencilFill /></Button>{' '}
-                            <Button variant='danger'><BsFillTrash3Fill /></Button>{' '}
+                            {!isDeleting &&
+                                <Button variant='danger' onClick={() => mutate(company.company_id)}><BsFillTrash3Fill /></Button>}
+                            {isDeleting &&
+                                <Button variant='danger' disabled>
+                                    <Spinner
+                                        as='span'
+                                        animation='grow'
+                                        size='sm'
+                                        role='status'
+                                        aria-hidden='true'
+                                    />
+                                </Button>
+                            }
                         </td>
                     </tr>
                 ))}
