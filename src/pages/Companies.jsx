@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { getCompanies } from '../services/apiCompanies.js'
 import { Button, Table } from 'react-bootstrap'
+import { BsFillInfoCircleFill, BsFillPencilFill, BsFillTrash3Fill } from 'react-icons/bs'
 
 function Companies() {
     useEffect(() => {
@@ -24,9 +25,9 @@ function Companies() {
                     <td>Mark</td>
                     <td>Otto</td>
                     <td>@mdo</td>
-                    <td><Button variant='primary'>Info</Button>{' '}
-                        <Button variant='warning'>Edit</Button>{' '}
-                        <Button variant='danger'>Delete</Button>{' '}
+                    <td><Button variant='primary'><BsFillInfoCircleFill /></Button>{' '}
+                        <Button variant='warning'><BsFillPencilFill /></Button>{' '}
+                        <Button variant='danger'><BsFillTrash3Fill /></Button>{' '}
                     </td>
                 </tr>
                 </tbody>
