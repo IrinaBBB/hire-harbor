@@ -5,6 +5,7 @@ import { BsFillInfoCircleFill, BsFillPencilFill, BsFillTrash3Fill } from 'react-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Loading from '../components/Loading.jsx'
 import Spinner from 'react-bootstrap/Spinner'
+import toast from 'react-hot-toast'
 
 function Companies() {
 
@@ -28,7 +29,7 @@ function Companies() {
     const { isLoading: isDeleting, mutate } = useMutation({
         mutationFn: deleteCompany,
         onSuccess: () => {
-            alert('Company successfully deleted')
+            toast.success('Company successfully deleted')
             queryClient
                 .invalidateQueries({
                     queryKey: ['Companies'],
@@ -36,7 +37,7 @@ function Companies() {
                 .then()
         },
         onError: (error) => {
-            alert(error.message)
+            toast.error(error.message)
         },
     })
 
